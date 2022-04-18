@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">CleanBaseApp</string>
+    <string name="crypto_buy">Valor para compra</string>
+    <string name="crypto_high">Maior valor</string>
+    <string name="crypto_low">Menor valor</string>
+    <string name="crypto_last">Último valor</string>
+    <string name="crypto_sell">Valor para venda</string>
+    <string name="crypto_open">Valor de abertura</string>
+    <string name="crypto_date">Data</string>
+    <string name="crypto_vol">Volume</string>
+    <string name="refresh_button">Atualizar</string>
+</resources>
