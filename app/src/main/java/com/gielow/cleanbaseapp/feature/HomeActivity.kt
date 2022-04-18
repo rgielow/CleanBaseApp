@@ -30,7 +30,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun navGraphBuilder(builder: NavGraphBuilder) = builder.apply {
         composable(Navigation.Home.route) {
-            WelcomeScreen(flowViewModel = flowViewModel)
+            WelcomeScreen()
         }
     }
 

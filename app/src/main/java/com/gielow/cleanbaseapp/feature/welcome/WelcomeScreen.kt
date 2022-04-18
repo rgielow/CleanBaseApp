@@ -24,6 +24,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gielow.cleanbaseapp.R
@@ -32,24 +34,21 @@ import com.gielow.cleanbaseapp.commons.extentions.toBrCurrency
 import com.gielow.cleanbaseapp.commons.size.Size
 import com.gielow.cleanbaseapp.commons.size.Weight1
 import com.gielow.cleanbaseapp.domain.model.CryptoPrices
-import com.gielow.cleanbaseapp.feature.HomeViewModel
 import com.gielow.cleanbaseapp.feature.welcome.WelcomeViewModel.ScreenState
 import com.gielow.cleanbaseapp.feature.welcome.WelcomeViewModel.UiState
 import com.gielow.cleanbaseapp.ui.LoadingScreen
 
 @Composable
 fun WelcomeScreen(
-    flowViewModel: HomeViewModel,
     viewModel: WelcomeViewModel = hiltViewModel()
 ) {
-    Screen(uiState = viewModel.uiState, onRefresh = viewModel::refreshPrices)
+    Screen(uiState = viewModel.uiState)
 }
 
 
 @Composable
 private fun Screen(
-    uiState: UiState,
-    onRefresh: () -> Unit
+    uiState: UiState
 ) {
     MaterialTheme {
         Column(
@@ -60,10 +59,7 @@ private fun Screen(
             when (val screenState = uiState.screenState.collectAsState().value) {
                 is ScreenState.ScreenLoading -> LoadingScreen()
                 is ScreenState.ScreenError -> {}
-                is ScreenState.ScreenSuccess -> ScreenContent(
-                    uiState = uiState,
-                    onRefresh = onRefresh
-                )
+                is ScreenState.ScreenSuccess -> ScreenContent(uiState = uiState)
             }
         }
     }
@@ -71,8 +67,7 @@ private fun Screen(
 
 @Composable
 private fun ScreenContent(
-    uiState: UiState,
-    onRefresh: () -> Unit
+    uiState: UiState
 ) {
     MaterialTheme {
         Column(
@@ -87,7 +82,7 @@ private fun ScreenContent(
             Image(
                 modifier = Modifier.size(width = Size.Size100, height = Size.Size100),
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_btc),
-                contentDescription = null
+                contentDescription = stringResource(id = R.string.btc_content_description)
             )
 
         }
@@ -141,9 +136,18 @@ private fun LabelWithValue(
     value: String
 ) {
     Row {
-        Text(text = label)
+        Text(
+            color = colorResource(id = R.color.support_500),
+            text = label,
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.Bold
+        )
         Spacer(modifier = Modifier.weight(Weight1))
-        Text(text = value)
+        Text(
+            color = colorResource(id = R.color.support_200),
+            fontFamily = FontFamily.Default,
+            text = value
+        )
     }
 }
 
@@ -154,7 +158,10 @@ private fun RefreshTimer(uiState: UiState) {
         targetValue = progress,
         animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
     ).value
-    LinearProgressIndicator(progress = animatedProgress)
+    LinearProgressIndicator(
+        progress = animatedProgress,
+        color = colorResource(id = R.color.primary_500)
+    )
 }
 
 
@@ -163,6 +170,5 @@ private fun RefreshTimer(uiState: UiState) {
 private fun ScreenPreview() {
     Screen(uiState = UiState().apply {
         screenState.value = ScreenState.ScreenSuccess(CryptoPrices.mock())
-    },
-        onRefresh = {})
+    })
 }

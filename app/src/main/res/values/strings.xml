@@ -9,4 +9,5 @@
     <string name="crypto_date">Data</string>
     <string name="crypto_vol">Volume</string>
     <string name="refresh_button">Atualizar</string>
+    <string name="btc_content_description">Símbolo do Bitcon</string>
 </resources>
