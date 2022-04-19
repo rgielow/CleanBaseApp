@@ -8,8 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor() : ViewModel(),
-    EventSender<HomeViewModel.Navigation> by ChannelEventSenderImpl() {
+class MainFlowViewModel @Inject constructor() : ViewModel(),
+    EventSender<MainFlowViewModel.Navigation> by ChannelEventSenderImpl() {
 
     fun navigate(navigation: Navigation) {
         viewModelScope.sendEvent(navigation)

@@ -10,4 +10,5 @@
     <string name="crypto_vol">Volume</string>
     <string name="refresh_button">Atualizar</string>
     <string name="btc_content_description">Símbolo do Bitcon</string>
+    <string name="close_icon_description">Botão de fechar</string>
 </resources>

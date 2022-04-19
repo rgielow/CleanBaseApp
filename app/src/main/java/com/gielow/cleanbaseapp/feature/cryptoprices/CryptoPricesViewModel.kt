@@ -1,15 +1,18 @@
-package com.gielow.cleanbaseapp.feature.welcome
+package com.gielow.cleanbaseapp.feature.cryptoprices
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gielow.cleanbaseapp.commons.network.Result
+import com.gielow.cleanbaseapp.commons.viewModel.ChannelEventSenderImpl
+import com.gielow.cleanbaseapp.commons.viewModel.EventSender
 import com.gielow.cleanbaseapp.domain.model.CryptoPrices
 import com.gielow.cleanbaseapp.domain.usecase.GetCryptoPricesUseCase
+import com.gielow.cleanbaseapp.feature.cryptoprices.CryptoPricesViewModel.ScreenEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 private const val EMPTY = ""
 private const val INITIAL_PROGRESS = 0F
@@ -17,14 +20,13 @@ private const val TIME_TO_REFRESH = 10000L
 private const val DELAY = 50L
 
 @HiltViewModel
-class WelcomeViewModel @Inject constructor(
+class CryptoPricesViewModel @Inject constructor(
     private val getCryptoPricesUseCase: GetCryptoPricesUseCase
-) : ViewModel() {
+) : ViewModel(), EventSender<ScreenEvent> by ChannelEventSenderImpl() {
     val uiState = UiState()
 
-    init {
-        refreshPrices()
-    }
+
+    fun onCloseClicked() = viewModelScope.sendEvent(ScreenEvent.Finish)
 
     fun refreshPrices() {
         uiState.screenState.value = ScreenState.ScreenLoading
@@ -33,10 +35,10 @@ class WelcomeViewModel @Inject constructor(
                 is Result.Success -> result.data?.let {
                     setSuccess(it)
                 }
-                is Result.Failure -> ScreenState.ScreenError(result.error)
+                is Result.Failure -> uiState.screenState.value =
+                    ScreenState.ScreenError(result.error)
             }
         }
-        timerToRefresh()
     }
 
     private fun setSuccess(crypto: CryptoPrices) {
@@ -51,6 +53,7 @@ class WelcomeViewModel @Inject constructor(
             vol.value = crypto.vol
             screenState.value = ScreenState.ScreenSuccess(crypto = crypto)
         }
+        timerToRefresh()
     }
 
     private fun timerToRefresh() {
@@ -83,5 +86,9 @@ class WelcomeViewModel @Inject constructor(
         data class ScreenSuccess(val crypto: CryptoPrices) : ScreenState()
         data class ScreenError(val error: String) : ScreenState()
         object ScreenLoading : ScreenState()
+    }
+
+    sealed class ScreenEvent {
+        object Finish : ScreenEvent()
     }
 }

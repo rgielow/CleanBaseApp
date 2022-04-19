@@ -7,15 +7,16 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.gielow.cleanbaseapp.R
+import com.gielow.cleanbaseapp.commons.navigation.composeNavigate
 import com.gielow.cleanbaseapp.commons.navigation.setNavigationContent
-import com.gielow.cleanbaseapp.feature.HomeViewModel.Navigation
-import com.gielow.cleanbaseapp.feature.welcome.WelcomeScreen
+import com.gielow.cleanbaseapp.feature.MainFlowViewModel.Navigation
+import com.gielow.cleanbaseapp.feature.cryptoprices.CryptoPricesScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
-    private val flowViewModel: HomeViewModel by viewModels()
+    private val flowViewModel: MainFlowViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,13 +31,16 @@ class HomeActivity : AppCompatActivity() {
 
     private fun navGraphBuilder(builder: NavGraphBuilder) = builder.apply {
         composable(Navigation.Home.route) {
-            WelcomeScreen()
+            CryptoPricesScreen()
         }
     }
 
     private fun navEvent(navController: NavHostController, navScreen: Navigation) {
-        navController.navigate(route = navScreen.route) {
-
+        when (navScreen) {
+            is Navigation.Home -> navController.composeNavigate(
+                route = navScreen.route,
+                popStack = navScreen.popStack
+            )
         }
     }
 

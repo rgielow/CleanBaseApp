@@ -15,7 +15,7 @@
         android:theme="@style/Theme.CleanBaseApp">
 
         <activity
-            android:name=".feature.HomeActivity"
+            android:name=".feature.MainActivity"
             android:exported="true"
             android:screenOrientation="fullSensor"
             android:theme="@style/Theme.CleanBaseApp">

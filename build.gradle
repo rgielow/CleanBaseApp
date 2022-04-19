@@ -63,5 +63,6 @@ ext {
     retrofitVersion = "2.6.0"
     loggingInterceptorVersion = "4.5.0"
     lottieVersion = "4.1.0"
-    swipeRefreshVersion = "0.24.6-alpha"
+    testCoroutineVersion = "1.6.1"
+    mokkVersion = "1.12.3"
 }
