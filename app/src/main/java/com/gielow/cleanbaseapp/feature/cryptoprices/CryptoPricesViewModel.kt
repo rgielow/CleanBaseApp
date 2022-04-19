@@ -25,6 +25,10 @@ class CryptoPricesViewModel @Inject constructor(
 ) : ViewModel(), EventSender<ScreenEvent> by ChannelEventSenderImpl() {
     val uiState = UiState()
 
+    init {
+        refreshPrices()
+    }
+
 
     fun onCloseClicked() = viewModelScope.sendEvent(ScreenEvent.Finish)
 
