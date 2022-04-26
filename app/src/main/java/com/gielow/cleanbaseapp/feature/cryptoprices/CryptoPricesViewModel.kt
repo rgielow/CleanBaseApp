@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 private const val EMPTY = ""
 private const val INITIAL_PROGRESS = 0F
-private const val TIME_TO_REFRESH = 10000L
+private const val TIME_TO_UPDATE = 10000L
 private const val DELAY = 50L
 
 @HiltViewModel
@@ -26,13 +26,12 @@ class CryptoPricesViewModel @Inject constructor(
     val uiState = UiState()
 
     init {
-        refreshPrices()
+        updatePrices()
     }
-
 
     fun onCloseClicked() = viewModelScope.sendEvent(ScreenEvent.Finish)
 
-    fun refreshPrices() {
+    fun updatePrices() {
         uiState.screenState.value = ScreenState.ScreenLoading
         viewModelScope.launch {
             when (val result = getCryptoPricesUseCase.execute()) {
@@ -57,19 +56,19 @@ class CryptoPricesViewModel @Inject constructor(
             vol.value = crypto.vol
             screenState.value = ScreenState.ScreenSuccess(crypto = crypto)
         }
-        timerToRefresh()
+        timerToUpdate()
     }
 
-    private fun timerToRefresh() {
+    private fun timerToUpdate() {
         var currentTimer = INITIAL_PROGRESS
         uiState.progress.value = INITIAL_PROGRESS
         viewModelScope.launch {
-            while (TIME_TO_REFRESH > currentTimer) {
+            while (TIME_TO_UPDATE > currentTimer) {
                 delay(DELAY)
                 currentTimer += DELAY
-                uiState.progress.value = currentTimer / TIME_TO_REFRESH
+                uiState.progress.value = currentTimer / TIME_TO_UPDATE
             }
-        }.invokeOnCompletion { refreshPrices() }
+        }.invokeOnCompletion { updatePrices() }
     }
 
 

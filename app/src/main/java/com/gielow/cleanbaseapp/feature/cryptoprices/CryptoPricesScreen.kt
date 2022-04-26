@@ -5,7 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +17,6 @@ import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProgressIndicatorDefaults
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -41,9 +39,9 @@ import com.gielow.cleanbaseapp.commons.size.Size
 import com.gielow.cleanbaseapp.commons.size.Weight1
 import com.gielow.cleanbaseapp.domain.model.CryptoPrices
 import com.gielow.cleanbaseapp.feature.MainActivity
+import com.gielow.cleanbaseapp.feature.cryptoprices.CryptoPricesViewModel.ScreenEvent
 import com.gielow.cleanbaseapp.feature.cryptoprices.CryptoPricesViewModel.ScreenState
 import com.gielow.cleanbaseapp.feature.cryptoprices.CryptoPricesViewModel.UiState
-import com.gielow.cleanbaseapp.feature.cryptoprices.CryptoPricesViewModel.ScreenEvent
 import com.gielow.cleanbaseapp.ui.LoadingScreen
 
 @Composable
@@ -122,7 +120,7 @@ private fun ScreenContent(
             verticalArrangement = Arrangement.spacedBy(Size.Size16)
         ) {
             Spacer(modifier = Modifier.size(Size.Size16))
-            RefreshTimer(uiState = uiState)
+            UpdateTimer(uiState = uiState)
             LabelWithValue(
                 label = stringResource(id = R.string.crypto_buy),
                 value = uiState.buy.collectAsState().value.toBrCurrency()
@@ -200,7 +198,7 @@ private fun LabelWithValue(
 }
 
 @Composable
-private fun RefreshTimer(uiState: UiState) {
+private fun UpdateTimer(uiState: UiState) {
     val progress by uiState.progress.collectAsState()
     val animatedProgress = animateFloatAsState(
         targetValue = progress,

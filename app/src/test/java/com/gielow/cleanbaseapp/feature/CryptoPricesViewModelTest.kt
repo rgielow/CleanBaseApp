@@ -55,12 +55,12 @@ class CryptoPricesViewModelTest {
     }
 
     @Test
-    fun `when refreshPrices() is success then ScreenSuccess is invoke`(): Unit = runBlocking {
+    fun `when updatePrices() is success then ScreenSuccess is invoke`(): Unit = runBlocking {
         //Prepare
         coEvery { useCase.execute() } returns Result.Success(CRYPTO_MOCK)
 
         //Action
-        viewModel.refreshPrices()
+        viewModel.updatePrices()
 
         //Check
         verifyOrder {
@@ -70,12 +70,12 @@ class CryptoPricesViewModelTest {
     }
 
     @Test
-    fun `when refreshPrices() is error then ScreenError is invoke`(): Unit = runBlocking {
+    fun `when updatePrices() is error then ScreenError is invoke`(): Unit = runBlocking {
         //Prepare
         coEvery { useCase.execute() } returns Result.Failure(ERROR_MOCK)
 
         //Action
-        viewModel.refreshPrices()
+        viewModel.updatePrices()
 
         //Check
         verifyOrder {
